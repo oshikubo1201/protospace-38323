@@ -26,7 +26,7 @@ class PrototypesController < ApplicationController
 
   def edit
     @prototype = Prototype.find(params[:id])
-    unless user_signed_in? == current_user
+    unless user_signed_in? && @prototype.user.id == current_user.id
       redirect_to action: :index
     end
   end
@@ -41,8 +41,12 @@ class PrototypesController < ApplicationController
 
   def destroy
     prototype = Prototype.find(params[:id])
+    unless user_signed_in? && prototype.user.id == current_user.id
+      redirect_to action: :index
+    else
     prototype.destroy
     redirect_to root_path
+    end
   end
   
 
